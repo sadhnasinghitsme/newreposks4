@@ -56,6 +56,7 @@ const RULES={
   email:(v,el)=>!v.trim()?(el.required?"Please enter your email address.":""):el.checkValidity()&&/\.[^.@\s]{2,}$/.test(v.trim())?"":el.required?"Please enter a valid email address.":"Please enter a valid email address, or leave it blank.",
   grade:v=>v?"":"Please select your child’s grade.",
   subject:v=>v.trim().length<2?"Please enter a subject.":"",
+  batch:v=>/^\d{4}$/.test(v.trim())&&+v>=1950&&+v<=new Date().getFullYear()?"":"Please enter a valid year of passing out, e.g. 2020.",
   message:(v,el)=>el.required&&v.trim().length<5?"Please enter your message.":"",
   position:v=>v?"":"Please select the post you are applying for.",
   resume:(v,el)=>{const f=el.files[0];return !f?"Please attach your resume (PDF, max 2 MB).":!/\.pdf$/i.test(f.name)?"Please upload your resume as a PDF file.":f.size>2*1024*1024?"Your resume must be 2 MB or smaller.":"";},
@@ -173,6 +174,10 @@ const ctf=document.getElementById("contactForm");
 if(ctf){addHoneypot(ctf);liveCheck(ctf);
   ctf.addEventListener("submit",async e=>{e.preventDefault();
     if(checkForm(ctf)&&await sendForm(ctf,"contact",Object.fromEntries(new FormData(ctf))))done(ctf.parentElement,"Thank you. We have received your message and will get back to you soon.");});}
+const alf=document.getElementById("alumniForm");
+if(alf){addHoneypot(alf);liveCheck(alf);
+  alf.addEventListener("submit",async e=>{e.preventDefault();
+    if(checkForm(alf)&&await sendForm(alf,"alumni",Object.fromEntries(new FormData(alf))))done(alf.parentElement,"Thank you for registering. We will keep you posted about alumni meets and school events.");});}
 const here=location.pathname.split("/").pop()||"index.html";
 document.querySelectorAll("nav.main a").forEach(a=>{if(a.getAttribute("href")===here)a.classList.add("on")});
 
